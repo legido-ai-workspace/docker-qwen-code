@@ -1,6 +1,9 @@
 services:
   gemini-dev:
     build:
+      args:
+        # Output of command: getent group docker | cut -d: -f3
+        DOCKER_GID: ${DOCKER_GID:-998}
       context: .
     container_name: ${CONTAINER_NAME:-gemini-cli}
     hostname: gemini-cli
