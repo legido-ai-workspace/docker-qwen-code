@@ -1,0 +1,6 @@
+.env
+.env*
+/commandhistory/
+/gemini/
+/workspace/
+*.bak*
