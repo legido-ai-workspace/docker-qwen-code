@@ -8,18 +8,23 @@ services:
     container_name: ${CONTAINER_NAME:-gemini-cli}
     hostname: gemini-cli
     volumes:
-      - ${VOLUME_COMMANDHISTORY:-./commandhistory}:/commandhistory	# History file is on host
-      - ${VOLUME_CONFIG:-./gemini}:/home/node/.gemini   		# Your config lives in ~/.config/gemini
-      - ${VOLUME_WORKSPACE:-./workspace}:/workspace			# Your project lives in the current dir
+      - ${VOLUME_COMMANDHISTORY:-./commandhistory}:/commandhistory      # History file is on host
+      - ${VOLUME_CONFIG:-./gemini}:/home/node/.gemini                   # Your config lives in ~/.config/gemini
+      - ${VOLUME_SSH:-./gemini}:/home/node/.ssh
+      - ${VOLUME_WORKSPACE:-./workspace}:/workspace                     # Your project lives in the current dir
       # Docker socket for Docker-in-Docker (optional)
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      # Container environment
-      - WORKSPACE_FOLDER=/workspace
       # API Configuration
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       # Timezone (uses host timezone)
       - TZ=${TZ:-UTC}
+      # Container environment
+      - WORKSPACE_FOLDER=/workspace
+      # AWS Credentials (sourced from host .env file)
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     # Health check
     healthcheck:
       test: ["CMD", "node", "--version"]

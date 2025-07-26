@@ -17,7 +17,7 @@ RUN install -m 0755 -d /etc/apt/keyrings \
     && usermod -aG docker node
 
 RUN npm install -g \
-    @google/gemini-cli typescript tsx nodemon npm-check-updates \
+    @google/gemini-cli@latest typescript tsx nodemon npm-check-updates \
     && npm cache clean --force \
     && apt-get autoremove -y && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
