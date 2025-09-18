@@ -1,6 +1,6 @@
 # docker-gemini-cli
 
-Docker container to run Gemini CLI safely
+Docker container to run [qwen code](https://github.com/QwenLM/qwen-code) safely
 
 # Configuration
 
@@ -34,10 +34,10 @@ docker compose build --no-cache
 docker compose up -d
 ```
 
-2. Run Gemini Cli
+2. Run qwen code
 
 ```
-docker exec -ti gemini-cli gemini
+docker exec -ti qwen-code qwen
 ```
 
 # Update

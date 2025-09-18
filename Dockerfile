@@ -4,7 +4,7 @@ FROM node:20-bookworm
 ARG DOCKER_GID
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget git build-essential python3 python3-pip curl ca-certificates gnupg lsb-release zsh fonts-powerline locales
+    nodejs npm
 
 RUN install -m 0755 -d /etc/apt/keyrings \
     && curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc \
@@ -17,24 +17,17 @@ RUN install -m 0755 -d /etc/apt/keyrings \
     && usermod -aG docker node
 
 RUN npm install -g \
-    @google/gemini-cli@latest typescript tsx nodemon npm-check-updates \
+    @qwen-code/qwen-code@latest \
     && npm cache clean --force \
     && apt-get autoremove -y && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /commandhistory /workspace \
-    && chown -R node:node /commandhistory /workspace
+RUN mkdir -p /projects /qwen_data \
+    && chown -R node:node /projects /qwen_data
 
 USER node
 
-WORKDIR /home/node
-
-RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
-    && touch /commandhistory/.bash_history \
-    && echo "$SNIPPET" >> "/home/node/.bashrc" \
-    && echo "$SNIPPET" >> "/home/node/.zshrc"
-
-WORKDIR /workspace
+WORKDIR /projects
 
 COPY --chown=node:node entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh

@@ -1,30 +1,18 @@
+networks:
+  network-ollama:
+    external: true
+
 services:
-  gemini-dev:
+  qwen-code:
     build:
       args:
         # Output of command: getent group docker | cut -d: -f3
         DOCKER_GID: ${DOCKER_GID:-998}
       context: .
-    container_name: ${CONTAINER_NAME:-gemini-cli}
-    hostname: gemini-cli
-    volumes:
-      - ${VOLUME_COMMANDHISTORY:-./commandhistory}:/commandhistory      # History file is on host
-      - ${VOLUME_CONFIG:-./gemini}:/home/node/.gemini                   # Your config lives in ~/.config/gemini
-      - ${VOLUME_SSH:-./gemini}:/home/node/.ssh
-      - ${VOLUME_WORKSPACE:-./workspace}:/workspace                     # Your project lives in the current dir
-      # Docker socket for Docker-in-Docker (optional)
-      - /var/run/docker.sock:/var/run/docker.sock
+    container_name: ${CONTAINER_NAME:-qwen-code}
     environment:
-      # API Configuration
-      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
-      # Timezone (uses host timezone)
+      #- OLLAMA_API=${OLLAMA_API:-http://ollama:11434}
       - TZ=${TZ:-UTC}
-      # Container environment
-      - WORKSPACE_FOLDER=/workspace
-      # AWS Credentials (sourced from host .env file)
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     # Health check
     healthcheck:
       test: ["CMD", "node", "--version"]
@@ -32,3 +20,12 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    hostname: qwen-code
+    # To use MCP ollama as docker
+    #networks:
+    #  - network-ollama
+    volumes:
+      - ${VOLUME_PROJECTS:-./projects}:/projects
+      - ${VOLUME_QWEN_DATA:-./qwen_data}:/qwen_data
+      # Docker socket for Docker-in-Docker (optional)
+      - /var/run/docker.sock:/var/run/docker.sock
