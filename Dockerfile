@@ -1,10 +1,10 @@
-FROM node:20-bookworm
+FROM node
 
 # Argument for the Docker group ID, which we will pass in during the build
 ARG DOCKER_GID
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget git build-essential python3 python3-pip curl ca-certificates gnupg lsb-release locales 
+    wget git build-essential python3 python3-pip curl ca-certificates gnupg lsb-release locales  python3-venv
 
 RUN install -m 0755 -d /etc/apt/keyrings \
     && curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc \
