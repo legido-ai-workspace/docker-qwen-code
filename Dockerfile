@@ -4,7 +4,7 @@ FROM node:20-bookworm
 ARG DOCKER_GID
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    nodejs npm
+    wget git build-essential python3 python3-pip curl ca-certificates gnupg lsb-release locales 
 
 RUN install -m 0755 -d /etc/apt/keyrings \
     && curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc \

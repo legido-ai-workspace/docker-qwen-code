@@ -11,6 +11,9 @@ services:
       context: .
     container_name: ${CONTAINER_NAME:-qwen-code}
     environment:
+      - GITHUB_APP_ID=${GITHUB_APP_ID}
+      - GITHUB_INSTALLATION_ID=${GITHUB_INSTALLATION_ID}
+      - GITHUB_PRIVATE_KEY=${GITHUB_PRIVATE_KEY}
       #- OLLAMA_API=${OLLAMA_API:-http://ollama:11434}
       - TZ=${TZ:-UTC}
     # Health check
@@ -26,6 +29,6 @@ services:
     #  - network-ollama
     volumes:
       - ${VOLUME_PROJECTS:-./projects}:/projects
-      - ${VOLUME_QWEN_DATA:-./qwen_data}:/qwen_data
+      - ${VOLUME_CONFIG:-./config}:/home/node/.qwen
       # Docker socket for Docker-in-Docker (optional)
       - /var/run/docker.sock:/var/run/docker.sock
