@@ -1,49 +1,119 @@
-# docker-gemini-cli
+# Docker Qwen Code
 
-Docker container to run [qwen code](https://github.com/QwenLM/qwen-code) safely
+Docker container to run [Qwen Code](https://github.com/QwenLM/Qwen) safely in an isolated environment.
 
-# Configuration
+Qwen Code is an AI coding assistant that helps developers write code more efficiently. This Docker image provides a secure and consistent environment to run Qwen Code with all necessary dependencies pre-installed.
 
-1. Get '.env' file:
+## Features
 
-```
-cp .env.example .env
-```
+- Isolated environment for running Qwen Code
+- Pre-installed Docker CLI for containerized development
+- Easy volume mounting for project files
+- Configurable GitHub App integration for repository access
+- Health checks for container status monitoring
 
-2. adjust settings that you want to use.
+## Prerequisites
 
-For instance get GID used by docker:
+- Docker installed on your system
+- Docker Compose (v2.0 or higher)
+- Access to a GitHub App or Personal Access Token (PAT) for repository operations
 
-```
-getent group docker | cut -d: -f3
-```
+## Configuration
 
-And if the value is different from default one (998) set variable `DOCKER_GID`
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
 
-# Build
+2. Configure the environment variables in `.env`:
+   
+   ### GitHub Authentication (Choose one)
+   
+   For GitHub App authentication:
+   ```env
+   GITHUB_APP_ID=your_github_app_id
+   GITHUB_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nYOUR_KEY_HERE\n-----END RSA PRIVATE KEY-----"
+   GITHUB_INSTALLATION_ID=your_installation_id
+   ```
+   
+   For Personal Access Token (classic):
+   ```env
+   GITHUB_PAT=your_personal_access_token
+   ```
+   
+   ### Docker Group ID
+   Get your Docker group ID:
+   ```bash
+   getent group docker | cut -d: -f3
+   ```
+   
+   If the value is different from the default (998), set the `DOCKER_GID` variable:
+   ```env
+   DOCKER_GID=your_docker_gid
+   ```
+   
+   ### Volume Mounts
+   Adjust the volume paths as needed:
+   ```env
+   VOLUME_CONFIG=/path/to/qwen/config
+   VOLUME_PROJECTS=/path/to/your/projects
+   ```
 
-```
+## Build
+
+Build the Docker image with:
+```bash
 docker compose build --no-cache
 ```
 
-# Execute
+## Usage
 
-1. Start docker container
+1. Start the container:
+   ```bash
+   docker compose up -d
+   ```
 
-```
-docker compose up -d
-```
+2. Access the Qwen Code CLI:
+   ```bash
+   docker exec -ti qwen-code qwen
+   ```
 
-2. Run qwen code
+3. For interactive shell access:
+   ```bash
+   docker exec -ti qwen-code /bin/bash
+   ```
 
-```
-docker exec -ti qwen-code qwen
-```
+## Update
 
-# Update
-
-```
+To update to the latest version:
+```bash
 docker compose down
 docker compose build --no-cache
 docker compose up -d
 ```
+
+## Volumes
+
+The container mounts two volumes by default:
+- `/projects`: Your local project files
+- `/home/node/.qwen`: Qwen configuration and data
+
+## GitHub Integration
+
+The container supports both GitHub App and Personal Access Token authentication for repository operations. Configure the appropriate environment variables in your `.env` file.
+
+For GitHub App permissions required:
+- Repository permissions: Administration (Read and write)
+- Contents: Read and write
+- Packages: Read and write
+- Workflows: Read and write
+
+For PAT permissions required:
+- `write:packages`
+- `delete:packages`
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Qwen Code is licensed under separate terms - see [QwenLM/Qwen](https://github.com/QwenLM/Qwen) for details.
