@@ -32,7 +32,9 @@ Qwen Code is an AI coding assistant that helps developers write code more effici
    For GitHub App authentication:
    ```env
    GITHUB_APP_ID=your_github_app_id
-   GITHUB_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nYOUR_KEY_HERE\n-----END RSA PRIVATE KEY-----"
+   GITHUB_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
+YOUR_KEY_HERE
+-----END RSA PRIVATE KEY-----"
    GITHUB_INSTALLATION_ID=your_installation_id
    ```
    
@@ -57,6 +59,40 @@ Qwen Code is an AI coding assistant that helps developers write code more effici
    ```env
    VOLUME_CONFIG=/path/to/qwen/config
    VOLUME_PROJECTS=/path/to/your/projects
+   ```
+
+## Running from GHCR
+
+You can run the Docker container directly from GitHub Container Registry without building it locally:
+
+1. Pull the image:
+   ```bash
+   docker pull ghcr.io/legido-ai-workspace/docker-qwen-code:latest
+   ```
+
+2. Run the container with volume mounts:
+   ```bash
+   docker run -it --rm \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v $HOME/.qwen:/home/node/.qwen \
+     -v $PWD:/projects \
+     ghcr.io/legido-ai-workspace/docker-qwen-code:latest \
+     qwen
+   ```
+
+3. Or start it as a daemon:
+   ```bash
+   docker run -d \
+     --name qwen-code \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v $HOME/.qwen:/home/node/.qwen \
+     -v $PWD:/projects \
+     ghcr.io/legido-ai-workspace/docker-qwen-code:latest
+   ```
+
+   Then access it with:
+   ```bash
+   docker exec -ti qwen-code qwen
    ```
 
 ## Build
