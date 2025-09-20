@@ -13,6 +13,7 @@ services:
     environment:
       - GITHUB_APP_ID=${GITHUB_APP_ID}
       - GITHUB_INSTALLATION_ID=${GITHUB_INSTALLATION_ID}
+      - GITHUB_PAT=${GITHUB_PAT}
       - GITHUB_PRIVATE_KEY=${GITHUB_PRIVATE_KEY}
       #- OLLAMA_API=${OLLAMA_API:-http://ollama:11434}
       - TZ=${TZ:-UTC}
