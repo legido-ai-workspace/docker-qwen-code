@@ -55,7 +55,7 @@ jobs:
           DOCKER_GID=998
 
     - name: Generate artifact attestation
-      uses: attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v3
       if: ${{ github.event_name != 'pull_request' && steps.push.outputs.digest != '' }}
       with:
         subject-name: ghcr.io/legido-ai-workspace/qwen-code
