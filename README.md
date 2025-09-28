@@ -6,11 +6,13 @@ Qwen Code is an AI coding assistant that helps developers write code more effici
 
 ## Features
 
-- Isolated environment for running Qwen Code
-- Pre-installed Docker CLI for containerized development
+- Isolated environment for running Qwen Code with multi-stage build optimization
+- Pre-installed Docker CLI for containerized development (Docker-in-Docker support)
+- Optimized image size through multi-stage build process
 - Easy volume mounting for project files
 - Configurable GitHub App integration for repository access
 - Health checks for container status monitoring
+- Non-root user security model
 
 ## Prerequisites
 
@@ -99,14 +101,23 @@ You can run the Docker container directly from GitHub Container Registry without
 
 Build the Docker image with:
 ```bash
-docker compose build --no-cache
+docker build -t qwen-code:latest .
 ```
+
+### Multi-stage Build Benefits
+
+This image uses a multi-stage build process that:
+
+- Separates the build environment (with all build tools) from the runtime environment
+- Reduces the final image size by only including necessary runtime dependencies
+- Improves security by minimizing the attack surface in the final image
+- Ensures better layer caching for faster builds
 
 ## Usage
 
 1. Start the container:
    ```bash
-   docker compose up -d
+   docker run -d --name qwen-code -v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/projects qwen-code:latest
    ```
 
 2. Access the Qwen Code CLI:
@@ -119,20 +130,39 @@ docker compose build --no-cache
    docker exec -ti qwen-code /bin/bash
    ```
 
+## Docker-in-Docker (DinD) Usage
+
+To use Docker commands inside the container:
+
+1. Run the container with access to the Docker socket:
+   ```bash
+   docker run -d --name qwen-code \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v $HOME/.qwen:/home/node/.qwen \
+     -v $PWD:/projects \
+     qwen-code:latest
+   ```
+
+2. Execute Docker commands inside the container:
+   ```bash
+   docker exec -ti qwen-code docker ps
+   ```
+
 ## Update
 
 To update to the latest version:
 ```bash
-docker compose down
-docker compose build --no-cache
-docker compose up -d
+docker build --no-cache -t qwen-code:latest .
+docker stop qwen-code
+docker rm qwen-code
+docker run -d --name qwen-code -v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/projects qwen-code:latest
 ```
 
 ## Volumes
 
-The container mounts two volumes by default:
+The container mounts these volumes by default:
 - `/projects`: Your local project files
-- `/home/node/.qwen`: Qwen configuration and data
+- `/qwen_data`: Qwen data storage (optional)
 
 ## GitHub Integration
 
@@ -147,6 +177,12 @@ For GitHub App permissions required:
 For PAT permissions required:
 - `write:packages`
 - `delete:packages`
+
+## Security
+
+- The application runs as a non-root user (appuser) for enhanced security
+- The Docker image uses a minimal base (node:bookworm-slim) to reduce the attack surface
+- Multi-stage build ensures only runtime dependencies are included in the final image
 
 ## License
 
