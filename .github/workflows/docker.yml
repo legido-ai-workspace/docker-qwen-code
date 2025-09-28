@@ -36,8 +36,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           build-args: |
-            IMAGE=alpine
-            VERSION=latest
+            DOCKER_GID=998
           context: .
           push: true
           tags: |
@@ -48,8 +47,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           build-args: |
-            IMAGE=alpine
-            VERSION=latest
+            DOCKER_GID=998
           context: .
           push: true
           tags: |
@@ -61,8 +59,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           build-args: |
-            IMAGE=alpine
-            VERSION=latest
+            DOCKER_GID=998
           context: .
           push: true
           tags: |
