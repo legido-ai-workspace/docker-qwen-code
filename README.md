@@ -104,6 +104,16 @@ Build the Docker image with:
 docker build -t qwen-code:latest .
 ```
 
+Or use the provided build script:
+```bash
+./build.sh --tag latest --push
+```
+
+Or use the Makefile:
+```bash
+make build
+```
+
 ### Multi-stage Build Benefits
 
 This image uses a multi-stage build process that:
@@ -112,6 +122,25 @@ This image uses a multi-stage build process that:
 - Reduces the final image size by only including necessary runtime dependencies
 - Improves security by minimizing the attack surface in the final image
 - Ensures better layer caching for faster builds
+
+### Build Automation
+
+The project includes several tools to simplify building and managing the Docker image:
+
+1. **Build script** (`build.sh`): A script that handles building and optionally pushing the image with proper Docker group ID configuration.
+
+2. **Makefile**: Provides convenient commands for common tasks:
+   - `make build`: Build the Docker image
+   - `make push`: Push the image to registry
+   - `make run`: Run the container in detached mode
+   - `make stop`: Stop and remove the running container
+   - `make exec`: Execute qwen command in the running container
+   - `make shell`: Access shell in the running container
+   - `make test`: Run a quick test to verify the container works
+   - `make clean`: Remove built images
+   - `make login`: Login to GitHub Container Registry
+
+3. **GitHub Actions workflow**: Automatically builds and pushes the image to GitHub Container Registry when changes are pushed to the main branch.
 
 ## Usage
 
