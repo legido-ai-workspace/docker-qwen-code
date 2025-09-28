@@ -123,24 +123,29 @@ This image uses a multi-stage build process that:
 - Improves security by minimizing the attack surface in the final image
 - Ensures better layer caching for faster builds
 
-### Build Automation
+### Build
 
-The project includes several tools to simplify building and managing the Docker image:
+Build the Docker image with:
+```bash
+# Get Docker group ID
+DOCKER_GID=$(getent group docker | cut -d: -f3)
 
-1. **Build script** (`build.sh`): A script that handles building and optionally pushing the image with proper Docker group ID configuration.
+# Build the image
+docker build --build-arg DOCKER_GID=$DOCKER_GID -t ghcr.io/legido-ai-workspace/docker-qwen-code:latest .
+```
 
-2. **Makefile**: Provides convenient commands for common tasks:
-   - `make build`: Build the Docker image
-   - `make push`: Push the image to registry
-   - `make run`: Run the container in detached mode
-   - `make stop`: Stop and remove the running container
-   - `make exec`: Execute qwen command in the running container
-   - `make shell`: Access shell in the running container
-   - `make test`: Run a quick test to verify the container works
-   - `make clean`: Remove built images
-   - `make login`: Login to GitHub Container Registry
+### Multi-stage Build Benefits
 
-3. **GitHub Actions workflow**: Automatically builds and pushes the image to GitHub Container Registry when changes are pushed to the main branch.
+This image uses a multi-stage build process that:
+
+- Separates the build environment (with all build tools) from the runtime environment
+- Reduces the final image size by only including necessary runtime dependencies
+- Improves security by minimizing the attack surface in the final image
+- Ensures better layer caching for faster builds
+
+## GitHub Actions Integration
+
+The project includes a GitHub Actions workflow (`.github/workflows/docker.yml`) that automatically builds and pushes the image to GitHub Container Registry when changes are pushed to the main branch.
 
 ## Usage
 
