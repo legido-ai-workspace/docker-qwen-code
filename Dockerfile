@@ -14,8 +14,7 @@ ARG QWEN_COMMIT=main
 
 # Clone and checkout - use --depth 1 for efficiency if using branches/tags
 # (If using full SHAs, you may need to remove --depth 1 or fetch explicitly)
-RUN git clone --depth 1 https://github.com/QwenLM/qwen-code.git . \
-    && git checkout \"${QWEN_COMMIT}\"
+RUN git clone --depth 1 https://github.com/QwenLM/qwen-code.git . && \\\n    git checkout \"${QWEN_COMMIT}\"
 
 # Install and globally link the package
 RUN npm install
