@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:22-bookworm AS builder
+FROM node:22-bookworm-slim AS builder
 
 # Install only what's needed to clone and build
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -22,7 +22,7 @@ RUN npm install
 RUN npm install -g .
 
 # Stage 2: Runtime image with Docker-in-Docker support
-FROM node:22-bookworm
+FROM node:22-bookworm-slim
 
 # Argument for the Docker group ID, which we will pass in during the build
 ARG DOCKER_GID
