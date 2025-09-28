@@ -13,8 +13,8 @@ WORKDIR /app
 ARG QWEN_COMMIT=main
 
 # Clone and checkout - use --depth 1 for efficiency if using branches/tags
-# (If using full SHAs, you may need to remove --depth 1 or fetch explicitly)
-RUN git clone --depth 1 https://github.com/QwenLM/qwen-code.git . && \\\n    git -C . checkout main
+RUN git clone --depth 1 https://github.com/QwenLM/qwen-code.git . && \
+    git -C . checkout main
 
 # Install and globally link the package
 RUN npm install
@@ -30,9 +30,9 @@ ARG DOCKER_GID
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget git build-essential python3 python3-pip curl ca-certificates gnupg lsb-release locales python3-venv \
     && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean && \
-    echo 'Acquire::Check-Valid-Until false;' > /etc/apt/apt.conf.d/99no-check-valid-until && \
-    echo 'Acquire::Check-Date false;' > /etc/apt/apt.conf.d/99no-check-date
+    && apt-get clean \
+    && echo 'Acquire::Check-Valid-Until false;' > /etc/apt/apt.conf.d/99no-check-valid-until \
+    && echo 'Acquire::Check-Date false;' > /etc/apt/apt.conf.d/99no-check-date
 
 # Install Docker CLI with fixed GPG keys
 RUN install -m 0755 -d /etc/apt/keyrings && \
