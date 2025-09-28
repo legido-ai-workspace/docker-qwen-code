@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:bookworm-slim AS builder
+FROM node:22-bookworm AS builder
 
 # Install only what's needed to clone and build
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -15,14 +15,14 @@ ARG QWEN_COMMIT=main
 # Clone and checkout - use --depth 1 for efficiency if using branches/tags
 # (If using full SHAs, you may need to remove --depth 1 or fetch explicitly)
 RUN git clone --depth 1 https://github.com/QwenLM/qwen-code.git . \
-    && git checkout "${QWEN_COMMIT}"
+    && git checkout \"${QWEN_COMMIT}\"
 
 # Install and globally link the package
 RUN npm install
 RUN npm install -g .
 
 # Stage 2: Runtime image with Docker-in-Docker support
-FROM node:bookworm-slim
+FROM node:22-bookworm
 
 # Argument for the Docker group ID, which we will pass in during the build
 ARG DOCKER_GID
