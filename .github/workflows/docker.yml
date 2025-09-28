@@ -1,9 +1,9 @@
 name: Create and publish a Docker image
 
 env:
+  # TODO: keep investigating how to use input and its default value
   DOCKERIMAGETAG: latest
   REGISTRY: ghcr.io
-  IMAGE_NAME: qwen-code
 
 on:
   push:
@@ -14,6 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       dockerimagetag:
+        # TODO: keep investigating how to use input and its default value
         default: latest
         description: Docker image tag
         required: true
@@ -22,20 +23,15 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and push Docker image using default docker image tag
         uses: docker/build-push-action@v5
         with:
@@ -45,8 +41,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ env.DOCKERIMAGETAG }}
-
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.DOCKERIMAGETAG }}
       # Below step only executed if action triggered manually
       - name: Build and push Docker image using input docker image tag
         if: ${{ inputs.dockerimagetag }}
@@ -58,13 +53,10 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ inputs.dockerimagetag }}
-
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ inputs.dockerimagetag }}
       - name: Get current date
         id: date
-        # FIX: Updated the deprecated `set-output` command
-        run: echo "date=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
-
+        run: echo "::set-output name=date::$(date +'%Y%m%d%H%M%S')"
       - name: Build and push Docker image with unique tag
         uses: docker/build-push-action@v5
         with:
@@ -74,4 +66,4 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ steps.date.outputs.date }}
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.date.outputs.date }}
