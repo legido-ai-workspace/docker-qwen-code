@@ -1,7 +1,6 @@
 name: Create and publish a Docker image
 
 env:
-  # TODO: keep investigating how to use input and its default value
   DOCKERIMAGETAG: latest
   REGISTRY: ghcr.io
   IMAGE_NAME: qwen-code
@@ -15,7 +14,6 @@ on:
   workflow_dispatch:
     inputs:
       dockerimagetag:
-        # TODO: keep investigating how to use input and its default value
         default: latest
         description: Docker image tag
         required: true
@@ -24,7 +22,6 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    # FIX: Add permissions block to grant write access to GitHub Packages
     permissions:
       contents: read
       packages: write
@@ -65,6 +62,7 @@ jobs:
 
       - name: Get current date
         id: date
+        # FIX: Updated the deprecated `set-output` command
         run: echo "date=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image with unique tag
