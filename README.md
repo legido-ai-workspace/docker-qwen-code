@@ -97,32 +97,6 @@ You can run the Docker container directly from GitHub Container Registry without
    docker exec -ti qwen-code qwen
    ```
 
-## Build
-
-Build the Docker image with:
-```bash
-docker build -t qwen-code:latest .
-```
-
-Or use the provided build script:
-```bash
-./build.sh --tag latest --push
-```
-
-Or use the Makefile:
-```bash
-make build
-```
-
-### Multi-stage Build Benefits
-
-This image uses a multi-stage build process that:
-
-- Separates the build environment (with all build tools) from the runtime environment
-- Reduces the final image size by only including necessary runtime dependencies
-- Improves security by minimizing the attack surface in the final image
-- Ensures better layer caching for faster builds
-
 ### Build
 
 Build the Docker image with:
