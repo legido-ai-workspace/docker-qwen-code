@@ -36,7 +36,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ghcr.io/legido-ai-workspace/docker-qwen-code
+        images: ghcr.io/legido-ai-workspace/qwen-code
         tags: |
           type=ref,event=branch
           type=ref,event=pr
@@ -55,9 +55,9 @@ jobs:
           DOCKER_GID=998
 
     - name: Generate artifact attestation
-      uses: actions/attest-build-provenance@v1
+      uses: attest-build-provenance@v1
       if: ${{ github.event_name != 'pull_request' && steps.push.outputs.digest != '' }}
       with:
-        subject-name: ghcr.io/legido-ai-workspace/docker-qwen-code
+        subject-name: ghcr.io/legido-ai-workspace/qwen-code
         subject-digest: ${{ steps.push.outputs.digest }}
         push-to-registry: true

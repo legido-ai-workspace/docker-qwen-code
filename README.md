@@ -69,7 +69,7 @@ You can run the Docker container directly from GitHub Container Registry without
 
 1. Pull the image:
    ```bash
-   docker pull ghcr.io/legido-ai-workspace/docker-qwen-code:latest
+   docker pull ghcr.io/legido-ai-workspace/qwen-code:latest
    ```
 
 2. Run the container with volume mounts:
@@ -78,7 +78,7 @@ You can run the Docker container directly from GitHub Container Registry without
      -v /var/run/docker.sock:/var/run/docker.sock \
      -v $HOME/.qwen:/home/node/.qwen \
      -v $PWD:/projects \
-     ghcr.io/legido-ai-workspace/docker-qwen-code:latest \
+     ghcr.io/legido-ai-workspace/qwen-code:latest \
      qwen
    ```
 
@@ -89,7 +89,7 @@ You can run the Docker container directly from GitHub Container Registry without
      -v /var/run/docker.sock:/var/run/docker.sock \
      -v $HOME/.qwen:/home/node/.qwen \
      -v $PWD:/projects \
-     ghcr.io/legido-ai-workspace/docker-qwen-code:latest
+     ghcr.io/legido-ai-workspace/qwen-code:latest
    ```
 
    Then access it with:
@@ -105,7 +105,7 @@ Build the Docker image with:
 DOCKER_GID=$(getent group docker | cut -d: -f3)
 
 # Build the image
-docker build --build-arg DOCKER_GID=$DOCKER_GID -t ghcr.io/legido-ai-workspace/docker-qwen-code:latest .
+docker build --build-arg DOCKER_GID=$DOCKER_GID -t ghcr.io/legido-ai-workspace/qwen-code:latest .
 ```
 
 ### Multi-stage Build Benefits
